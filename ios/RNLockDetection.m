@@ -23,19 +23,37 @@ RNLockDetection * ref;
   [self sendEventWithName:@"LockStatusChange" body:@{@"phoneStatus": newLockedStatus}];
 
 }
+static void displayStatusChanged(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
+{
+    CFStringRef nameCFString = (CFStringRef)name;
+    NSString *lockState = (NSString*)nameCFString;
+    NSLog(@"Darwin notification NAME = %@",name);
+
+    if([lockState isEqualToString:@"com.apple.springboard.lockcomplete"])
+    {
+          [ref lockStatusChanged:@"LOCKED"];
+    }
+    else
+    {
+         [ref lockStatusChanged:@"UNLOCKED"];
+    }
+}
 
 RCT_EXPORT_MODULE(RNLockDetection);
 RCT_EXPORT_METHOD(registerForDeviceLockNotification) {
-    int notify_token = 0;
-    notify_register_dispatch("com.apple.springboard.lockstate", &notify_token, dispatch_get_main_queue(), ^(int token) {
-        uint64_t state = UINT64_MAX;
-        notify_get_state(token, &state);
+   //Screen lock notifications
+       CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
+                                       NULL, // observer
+                                       displayStatusChanged, // callback
+                                       CFSTR("com.apple.springboard.lockcomplete"), // event name
+                                       NULL, // object
+                                       CFNotificationSuspensionBehaviorDeliverImmediately);
 
-        if (state == 0) {
-            [ref lockStatusChanged:@"UNLOCKED"];
-        } else {
-            [ref lockStatusChanged:@"LOCKED"];
-        }
-    });
+       CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
+                                       NULL, // observer
+                                       displayStatusChanged, // callback
+                                       CFSTR("com.apple.springboard.lockstate"), // event name
+                                       NULL, // object
+                                       CFNotificationSuspensionBehaviorDeliverImmediately);
 }
 @end
