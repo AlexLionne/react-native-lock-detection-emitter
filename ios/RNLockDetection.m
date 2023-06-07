@@ -25,7 +25,7 @@ RNLockDetection * ref;
 }
 static void displayStatusChanged(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
 {
-    CFStringRef nameCFString = (CFStringRef)name;
+    /*CFStringRef nameCFString = (CFStringRef)name;
     NSString *lockState = (NSString*)nameCFString;
     NSLog(@"Darwin notification NAME = %@",name);
 
@@ -36,7 +36,7 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
     else
     {
          [ref lockStatusChanged:@"UNLOCKED"];
-    }
+    }*/
 }
 
 RCT_EXPORT_MODULE(RNLockDetection);
