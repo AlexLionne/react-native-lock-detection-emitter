@@ -41,7 +41,7 @@ static void displayStatusChanged(CFNotificationCenterRef center, void *observer,
 
 RCT_EXPORT_MODULE(RNLockDetection);
 RCT_EXPORT_METHOD(registerForDeviceLockNotification) {
-   //Screen lock notifications
+   /*
        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), //center
                                        NULL, // observer
                                        displayStatusChanged, // callback
@@ -55,5 +55,6 @@ RCT_EXPORT_METHOD(registerForDeviceLockNotification) {
                                        CFSTR("com.apple.springboard.lockstate"), // event name
                                        NULL, // object
                                        CFNotificationSuspensionBehaviorDeliverImmediately);
+   */
 }
 @end
